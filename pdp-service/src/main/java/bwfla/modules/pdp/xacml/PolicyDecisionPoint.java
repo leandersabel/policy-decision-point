@@ -14,17 +14,15 @@
  * limitations under the License.
  */
 
-package bwfla.modules.pdp.service;
+package bwfla.modules.pdp.xacml;
 
-import javax.jws.WebMethod;
-import javax.jws.WebService;
+import lombok.extern.log4j.Log4j;
 
-@WebService(targetNamespace = "http://bw-fla.uni-freiburg.de/")
-public interface PolicyDecisionService {
+import org.wso2.balana.Balana;
 
-	@WebMethod
-	public String sayHi(String name);
-	
-	
+@Log4j
+public class PolicyDecisionPoint {
+
+	Balana b;
 
 }
