@@ -16,25 +16,12 @@
 
 package bwfla.modules.pdp.service;
 
-import javax.ejb.EJB;
-import javax.jws.WebService;
-
-
-@WebService(serviceName = "PolicyDecisionService", endpointInterface = "bwfla.modules.pdp.service.PolicyDecisionService", targetNamespace = "http://bw-fla.uni-freiburg.de/")
-public class PolicyDecisionServiceImpl implements PolicyDecisionService {
-
-	@EJB
-	PolicyDecisionPointLocal policyDecisionPoint;
-	
-	/**
-	 * @WebMethod to test the availability of the web service.
-	 * @param name
-	 *          of the person to greet
-	 * @returns a greeting String
-	 */
-	@Override
-	public String sayHi(String name) {
-		return "Hi " + name + "!";
-	}
+/**
+ * Local interface to {@link PolicyDecisionPoint} for @EJB injection
+ * 
+ * @author Leander
+ * 
+ */
+public interface PolicyDecisionPointLocal {
 
 }

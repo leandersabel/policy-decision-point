@@ -16,13 +16,29 @@
 
 package bwfla.modules.pdp.xacml;
 
+import javax.ejb.Singleton;
+import javax.ejb.Startup;
+
 import lombok.extern.log4j.Log4j;
 
 import org.wso2.balana.Balana;
 
-@Log4j
-public class PolicyDecisionPoint {
+import bwfla.modules.pdp.service.PolicyDecisionPointLocal;
 
-	Balana b;
+@Log4j
+@Startup
+@Singleton
+public class PolicyDecisionPoint implements PolicyDecisionPointLocal {
+
+	private Balana balana;
+
+	/**
+	 * Create a new PDP. This is called by JavaEE because of the @Startup
+	 * annotation.
+	 */
+	public PolicyDecisionPoint() {
+		log.info("Initializing Policy Decision Point");
+		log.info("----------------------------------");
+	}
 
 }
