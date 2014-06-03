@@ -25,6 +25,7 @@ public interface PolicyDecisionService {
 	@WebMethod
 	public String sayHi(String name);
 	
-	
+	@WebMethod 
+	public String evaluate(String request);
 
 }

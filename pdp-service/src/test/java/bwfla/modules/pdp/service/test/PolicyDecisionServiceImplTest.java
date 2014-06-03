@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package bwfla.modules.pdp.service;
+package bwfla.modules.pdp.service.test;
 
 
 import java.net.MalformedURLException;
@@ -26,6 +26,8 @@ import javax.xml.ws.Service;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import bwfla.modules.pdp.service.PolicyDecisionService;
 
 public class PolicyDecisionServiceImplTest {
 

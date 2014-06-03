@@ -24,4 +24,6 @@ package bwfla.modules.pdp.service;
  */
 public interface PolicyDecisionPointLocal {
 
+	public String evaluate(String request);
+	
 }

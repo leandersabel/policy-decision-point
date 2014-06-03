@@ -16,12 +16,18 @@
 
 package bwfla.modules.pdp.xacml;
 
+import java.io.IOException;
+import java.net.URL;
+
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 
+import lombok.NonNull;
 import lombok.extern.log4j.Log4j;
 
 import org.wso2.balana.Balana;
+import org.wso2.balana.PDP;
+import org.wso2.balana.finder.impl.FileBasedPolicyFinderModule;
 
 import bwfla.modules.pdp.service.PolicyDecisionPointLocal;
 
@@ -31,14 +37,50 @@ import bwfla.modules.pdp.service.PolicyDecisionPointLocal;
 public class PolicyDecisionPoint implements PolicyDecisionPointLocal {
 
 	private Balana balana;
+	public PDP pdp;
 
 	/**
 	 * Create a new PDP. This is called by JavaEE because of the @Startup
 	 * annotation.
+	 * 
+	 * @throws IOException
 	 */
 	public PolicyDecisionPoint() {
-		log.info("Initializing Policy Decision Point");
-		log.info("----------------------------------");
+		log.info("# ---------------------------------- #");
+		log.info("# Initializing Policy Decision Point #");
+		log.info("# ---------------------------------- #");
+
+		balana = initBalana();
+		pdp = new PDP(balana.getPdpConfig());
+
+		// String response = pdp.evaluate(Helper.loadExampleRequest());
+
+		// log.info(response);
+	}
+	
+	@Override
+	public String evaluate(@NonNull String request) {
+		return pdp.evaluate(request);
+	}
+
+	/**
+	 * Initialize Balana with the correct policies folder
+	 * 
+	 * @return
+	 */
+	private Balana initBalana() {
+		// --- Setup folder for XACML policies
+		// ------------------------------------------------------------------------
+		URL policies = getClass().getClassLoader().getResource("policies");
+		System.setProperty(FileBasedPolicyFinderModule.POLICY_DIR_PROPERTY, policies.getFile());
+		log.info("Using policies found in: " + policies.getFile());
+
+		// Warn user about spaces in the filename
+		if (policies.getFile().contains("%20") || policies.getFile().contains(" ")) {
+			log.warn("The path to the policies contains spaces. This may cause problems.");
+		}
+
+		return Balana.getInstance();
 	}
 
 }

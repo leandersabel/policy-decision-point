@@ -37,4 +37,9 @@ public class PolicyDecisionServiceImpl implements PolicyDecisionService {
 		return "Hi " + name + "!";
 	}
 
+	@Override
+	public String evaluate(String request) {
+		return policyDecisionPoint.evaluate(request);
+	}
+
 }
