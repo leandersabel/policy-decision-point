@@ -1,0 +1,70 @@
+/* 
+ * Copyright (c) 2014 Leander Sabel
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package bwfla.modules.pdp.client;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+
+import com.google.common.base.Charsets;
+import com.google.common.io.CharStreams;
+import com.google.common.io.Files;
+
+import lombok.NonNull;
+import lombok.extern.log4j.Log4j;
+
+@Log4j
+public class Helper {
+
+	/**
+	 * Load a file from a local folder
+	 * 
+	 * @param path
+	 *          The file's path e.g. "example/example-policy.xml"
+	 * @return the file's content in a string
+	 */
+	public static String loadContentFromFile(@NonNull String path) {
+		try (InputStream requestIn = Helper.class.getClassLoader().getResourceAsStream(path)) {
+			if (requestIn == null)
+				throw new IOException();
+
+			return CharStreams.toString(new InputStreamReader(requestIn, "UTF-8"));
+		}
+		catch (IOException e) {
+			log.error("Could not file from path: " + path, e);
+			return null;
+		}
+	}
+
+	/**
+	 * 
+	 * @param path
+	 * @param content
+	 */
+	public static void writeContentToFile(@NonNull String path, @NonNull String content) {
+		URL url = Helper.class.getClassLoader().getResource(path);
+		try {
+			Files.write(content, new File(url.getFile()), Charsets.UTF_8);
+		}
+		catch (IOException e) {
+			log.error("Could not write to file " + path, e);
+		}
+	}
+
+}

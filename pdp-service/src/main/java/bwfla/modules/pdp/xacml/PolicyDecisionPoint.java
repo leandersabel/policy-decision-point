@@ -60,6 +60,9 @@ public class PolicyDecisionPoint implements PolicyDecisionPointLocal {
 	
 	@Override
 	public String evaluate(@NonNull String request) {
+		balana = initBalana();
+		pdp = new PDP(balana.getPdpConfig());
+		
 		return pdp.evaluate(request);
 	}
 

@@ -18,22 +18,35 @@ package bwfla.modules.pdp.client;
 
 
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import javax.xml.namespace.QName;
+import javax.xml.ws.Service;
+
+import bwfla.modules.pdp.service.PolicyDecisionService;
 import bwfla.modules.pdp.util.Helper;
-import bwfla.modules.pdp.xacml.PolicyDecisionPoint;
 
 public class Client {
 
-	public static void main(String[] args) {
-		PolicyDecisionPoint pdp = new PolicyDecisionPoint();
+	public static void main(String[] args) throws MalformedURLException {
 
+		QName qname = new QName("http://bw-fla.uni-freiburg.de/", "PolicyDecisionService");
+		URL wsdl = new URL("http://localhost:8080/pdp-service/PolicyDecisionService?wsdl");
+
+		Service service = Service.create(wsdl, qname);
+		PolicyDecisionService port = service.getPort(PolicyDecisionService.class);
+		
 		String request = Helper.loadContentFromFile("example-request.xml");
-		String response = pdp.evaluate(request);
+		
+		String response = port.evaluate(request);
+		System.out.println(response);
 
-		if (response.contains("Denied"))
+		if (response.contains("Deny"))
 			System.out.println("Access Denied");
-		else if (response.contains("Granted"))
+		else if (response.contains("Permit"))
 			System.out.println("Access Granted");
-		else if (request.contains("Not Applicable"))
+		else if (response.contains("NotApplicable"))
 			System.out.println("No rule applicable");
 		else
 			System.out.println("Unknown response type");
