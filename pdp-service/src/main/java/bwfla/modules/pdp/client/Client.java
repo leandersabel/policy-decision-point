@@ -14,31 +14,28 @@
  * limitations under the License.
  */
 
-package bwfla.modules.pdp.xacml;
+package bwfla.modules.pdp.client;
 
 
-import junit.framework.Assert;
-
-import org.junit.Before;
-import org.junit.Test;
 
 import bwfla.modules.pdp.util.Helper;
+import bwfla.modules.pdp.xacml.PolicyDecisionPoint;
 
-public class PolicyDecisionPointTest {
-	
-	PolicyDecisionPoint pdp;
-	
-	@Before
-	public void initialize() {
-		pdp = new PolicyDecisionPoint();
-	}
+public class Client {
 
-	@Test
-	public void testPDP() {
+	public static void main(String[] args) {
+		PolicyDecisionPoint pdp = new PolicyDecisionPoint();
+
 		String request = Helper.loadContentFromFile("example-request.xml");
 		String response = pdp.evaluate(request);
-		Assert.assertEquals(true, response.contains("<Decision>Deny</Decision>"));
-		Assert.assertEquals(true, response.contains("StatusCode Value=\"urn:oasis:names:tc:xacml:1.0:status:ok\"/>"));
-	}
 
+		if (response.contains("Denied"))
+			System.out.println("Access Denied");
+		else if (response.contains("Granted"))
+			System.out.println("Access Granted");
+		else if (request.contains("Not Applicable"))
+			System.out.println("No rule applicable");
+		else
+			System.out.println("Unknown response type");
+	}
 }

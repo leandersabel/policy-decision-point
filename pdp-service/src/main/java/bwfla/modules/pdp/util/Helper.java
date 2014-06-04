@@ -16,18 +16,22 @@
 
 package bwfla.modules.pdp.util;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URL;
 
+import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
+import com.google.common.io.Files;
 
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j;
 
 @Log4j
 public class Helper {
-	
+
 	/**
 	 * Load a file from a local folder
 	 * 
@@ -45,6 +49,21 @@ public class Helper {
 		catch (IOException e) {
 			log.error("Could not file from path: " + path, e);
 			return null;
+		}
+	}
+
+	/**
+	 * 
+	 * @param path
+	 * @param content
+	 */
+	public static void writeContentToFile(@NonNull String path, @NonNull String content) {
+		URL url = Helper.class.getClassLoader().getResource(path);
+		try {
+			Files.write(content, new File(url.getFile()), Charsets.UTF_8);
+		}
+		catch (IOException e) {
+			log.error("Could not write to file " + path, e);
 		}
 	}
 
